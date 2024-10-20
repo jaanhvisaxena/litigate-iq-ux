@@ -38,10 +38,10 @@ export default function UnifiedDashboardComponent() {
         return <CaseManagement />
       case "sentiment-analysis":
         return <SentimentAnalysis />
-      case "predictive-analytics":
-        return <PredictiveAnalytics />
-      case "risk-assessment":
-        return <RiskAssessment />
+      // case "predictive-analytics":
+      //   return <PredictiveAnalytics />
+      // case "risk-assessment":
+      //   return <RiskAssessment />
       case "role-management":
         return <RoleManagement />
       case "case-detail":
