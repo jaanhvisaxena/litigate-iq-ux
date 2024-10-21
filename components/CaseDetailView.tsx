@@ -26,14 +26,14 @@ export default function CaseDetailView() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-4 sm:p-2">
       {/* Case Information */}
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Case Information</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
             <div>
               <Label>Client Name</Label>
               <p>John Doe</p>
@@ -60,7 +60,7 @@ export default function CaseDetailView() {
       </Card>
 
       {/* Timeline Section */}
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Timeline</CardTitle>
         </CardHeader>
@@ -79,13 +79,13 @@ export default function CaseDetailView() {
                 color: "#3b82f6",
               },
             }}
-            className="h-[300px]"
+            className="h-[300px] w-full"
           />
         </CardContent>
       </Card>
 
       {/* Documents Section */}
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Documents</CardTitle>
         </CardHeader>
@@ -108,8 +108,8 @@ export default function CaseDetailView() {
           </ScrollArea>
           <div className="mt-4">
             <Label htmlFor="document-upload">Upload Document</Label>
-            <Input id="document-upload" type="file" />
-            <Button variant="outline" className="mt-2">
+            <Input id="document-upload" type="file" className="w-full" />
+            <Button variant="outline" className="mt-2 w-full sm:w-auto">
               <Upload className="mr-2 h-4 w-4" />
               Upload
             </Button>
@@ -118,7 +118,7 @@ export default function CaseDetailView() {
       </Card>
 
       {/* Notes Section */}
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Notes</CardTitle>
         </CardHeader>
@@ -127,8 +127,9 @@ export default function CaseDetailView() {
             placeholder="Add a note..."
             value={notes}
             onChange={handleNoteChange}
+            className="w-full"
           />
-          <Button className="mt-2" onClick={handleAddNote}>
+          <Button className="mt-2 w-full sm:w-auto" onClick={handleAddNote}>
             Add Note
           </Button>
           {/* Display existing notes */}
