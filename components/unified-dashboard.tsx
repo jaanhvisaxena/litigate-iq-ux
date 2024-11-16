@@ -8,7 +8,7 @@ import { LogOut, Menu } from "lucide-react"
 // Import all the components
 import Dashboard from "@/components/Dashboard"
 import DocumentAnalysis from "@/components/DocumentAnalysis"
-import CaseManagement from "@/components/CaseManagement"
+// import CaseManagement from "@/components/CaseManagement"
 import SentimentAnalysis from "@/components/SentimentAnalysis"
 import PredictiveAnalytics from "@/components/PredictiveAnalytics"
 import RiskAssessment from "@/components/RiskAssessment"
@@ -18,7 +18,7 @@ import LegalResearchTool from "@/components/LegalResearchTool"
 import DocumentGeneration from "@/components/DocumentGeneration"
 import UserFeedbackPage from "@/components/UserFeedbackPage"
 import CommunicationModule from "@/components/CommunicationModule"
-import { SettingsComponent } from "./Settings"
+import SettingsComponent  from "./Settings"
 
 export default function UnifiedDashboardComponent() {
   const [activeSection, setActiveSection] = useState("dashboard")
@@ -30,8 +30,8 @@ export default function UnifiedDashboardComponent() {
         return <Dashboard />
       case "document-analysis":
         return <DocumentAnalysis />
-      case "case-management":
-        return <CaseManagement />
+      // case "case-management":
+      //   return <CaseManagement />
       // case "sentiment-analysis":
       //   return <SentimentAnalysis />
       // case "risk-assessment":
@@ -42,8 +42,8 @@ export default function UnifiedDashboardComponent() {
         return <CaseDetailView />
       case "legal-research":
         return <LegalResearchTool />
-      case "document-generation":
-        return <DocumentGeneration />
+      // case "document-generation":
+      //   return <DocumentGeneration />
       case "user-feedback":
         return <UserFeedbackPage />
       case "communication":
@@ -87,26 +87,26 @@ export default function UnifiedDashboardComponent() {
           >
             Case Detail
           </Button>
-          <Button
-            onClick={() => setActiveSection("case-management")}
-            className={`w-full justify-start px-4 py-3 text-left rounded-lg ${
-              activeSection === "case-management"
-                ? "bg-gray-200 text-black"
-                : "bg-white text-black hover:bg-gray-100"
-            }`}
-          >
-            Case Management
-          </Button>
-          <Button
-            onClick={() => setActiveSection("document-generation")}
-            className={`w-full justify-start px-4 py-3 text-left rounded-lg ${
-              activeSection === "document-generation"
-                ? "bg-gray-200 text-black"
-                : "bg-white text-black hover:bg-gray-100"
-            }`}
-          >
-            Document Generation
-          </Button>
+          {/*<Button*/}
+          {/*  onClick={() => setActiveSection("case-management")}*/}
+          {/*  className={`w-full justify-start px-4 py-3 text-left rounded-lg ${*/}
+          {/*    activeSection === "case-management"*/}
+          {/*      ? "bg-gray-200 text-black"*/}
+          {/*      : "bg-white text-black hover:bg-gray-100"*/}
+          {/*  }`}*/}
+          {/*>*/}
+          {/*  Case Management*/}
+          {/*</Button>*/}
+          {/*<Button*/}
+          {/*  onClick={() => setActiveSection("document-generation")}*/}
+          {/*  className={`w-full justify-start px-4 py-3 text-left rounded-lg ${*/}
+          {/*    activeSection === "document-generation"*/}
+          {/*      ? "bg-gray-200 text-black"*/}
+          {/*      : "bg-white text-black hover:bg-gray-100"*/}
+          {/*  }`}*/}
+          {/*>*/}
+          {/*  Document Generation*/}
+          {/*</Button>*/}
           <Button
             onClick={() => setActiveSection("legal-research")}
             className={`w-full justify-start px-4 py-3 text-left rounded-lg ${
@@ -117,16 +117,16 @@ export default function UnifiedDashboardComponent() {
           >
             Legal Research
           </Button>
-          <Button
-            onClick={() => setActiveSection("document-analysis")}
-            className={`w-full justify-start px-4 py-3 text-left rounded-lg ${
-              activeSection === "document-analysis"
-                ? "bg-gray-200 text-black"
-                : "bg-white text-black hover:bg-gray-100"
-            }`}
-          >
-            Document Analysis
-          </Button>
+          {/*<Button*/}
+          {/*  onClick={() => setActiveSection("document-analysis")}*/}
+          {/*  className={`w-full justify-start px-4 py-3 text-left rounded-lg ${*/}
+          {/*    activeSection === "document-analysis"*/}
+          {/*      ? "bg-gray-200 text-black"*/}
+          {/*      : "bg-white text-black hover:bg-gray-100"*/}
+          {/*  }`}*/}
+          {/*>*/}
+          {/*  Document Analysis*/}
+          {/*</Button>*/}
           {/*<Button*/}
           {/*  onClick={() => setActiveSection("sentiment-analysis")}*/}
           {/*  className={`w-full justify-start px-4 py-3 text-left rounded-lg ${*/}
@@ -147,16 +147,16 @@ export default function UnifiedDashboardComponent() {
           {/*>*/}
           {/*  Risk Assessment*/}
           {/*</Button>*/}
-          <Button
-            onClick={() => setActiveSection("role-management")}
-            className={`w-full justify-start px-4 py-3 text-left rounded-lg ${
-              activeSection === "role-management"
-                ? "bg-gray-200 text-black"
-                : "bg-white text-black hover:bg-gray-100"
-            }`}
-          >
-            Role Management
-          </Button>
+          {/*<Button*/}
+          {/*  onClick={() => setActiveSection("role-management")}*/}
+          {/*  className={`w-full justify-start px-4 py-3 text-left rounded-lg ${*/}
+          {/*    activeSection === "role-management"*/}
+          {/*      ? "bg-gray-200 text-black"*/}
+          {/*      : "bg-white text-black hover:bg-gray-100"*/}
+          {/*  }`}*/}
+          {/*>*/}
+          {/*  Role Management*/}
+          {/*</Button>*/}
           <Button
             onClick={() => setActiveSection("communication")}
             className={`w-full justify-start px-4 py-3 text-left rounded-lg ${
@@ -167,16 +167,16 @@ export default function UnifiedDashboardComponent() {
           >
             Communication
           </Button>
-          <Button
-            onClick={() => setActiveSection("user-feedback")}
-            className={`w-full justify-start px-4 py-3 text-left rounded-lg ${
-              activeSection === "user-feedback"
-                ? "bg-gray-200 text-black"
-                : "bg-white text-black hover:bg-gray-100"
-            }`}
-          >
-            User Feedback
-          </Button>
+          {/*<Button*/}
+          {/*  onClick={() => setActiveSection("user-feedback")}*/}
+          {/*  className={`w-full justify-start px-4 py-3 text-left rounded-lg ${*/}
+          {/*    activeSection === "user-feedback"*/}
+          {/*      ? "bg-gray-200 text-black"*/}
+          {/*      : "bg-white text-black hover:bg-gray-100"*/}
+          {/*  }`}*/}
+          {/*>*/}
+          {/*  User Feedback*/}
+          {/*</Button>*/}
           <Button
             onClick={() => setActiveSection("settings")}
             className={`w-full justify-start px-4 py-3 text-left rounded-lg ${
