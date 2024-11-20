@@ -12,7 +12,6 @@ import {
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -103,113 +102,142 @@ export default function LegalResearchTool() {
   }
 
   return (
-      <div className="space-y-8 p-4 sm:p-6 bg-gray-50">
-        <Card className="shadow-lg">
+      <div className="p-4 sm:p-6 bg-gray-50">
+        <Card className="shadow-lg max-w-7xl mx-auto">
           <CardHeader>
-            {/*<CardTitle className="text-2xl font-bold">Legal Research Tool</CardTitle>*/}
-            <CardTitle>Search for legal materials and filter results</CardTitle>
+            <CardTitle className="text-2xl font-bold text-gray-800">
+              Legal Research Tool
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSearch} className="mb-6">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+            {/* Search Form */}
+            <form onSubmit={handleSearch} className="mb-8">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
                 <Input
                     type="search"
                     placeholder="Search legal materials..."
-                    className="pl-4 flex-grow"
+                    className="flex-grow px-4 py-3 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <Button type="submit" className="w-full sm:w-auto">
+                <Button
+                    type="submit"
+                    className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition"
+                >
                   Search
                 </Button>
               </div>
             </form>
 
-            <div className="flex flex-col md:flex-row items-start md:space-x-6">
+            {/* Main Content Area */}
+            <div className="flex flex-col lg:flex-row lg:space-x-6">
               {/* Filters Sidebar */}
               <div
-                  className={`transition-all duration-300 ${
-                      isFiltersVisible
-                          ? "w-full md:w-64 mb-4 md:mb-0"
-                          : "w-full md:w-12 mb-4 md:mb-0"
+                  className={`mb-8 lg:mb-0 lg:w-1/4 transition-all duration-300 ${
+                      isFiltersVisible ? "block" : "hidden"
                   }`}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold">Filters</h2>
-                  <Button variant="ghost" size="icon" onClick={toggleFilters}>
-                    {isFiltersVisible ? <ChevronUp /> : <ChevronDown />}
-                  </Button>
+                <div className="bg-white rounded-lg shadow-md p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-semibold text-gray-800">
+                      Filters
+                    </h2>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={toggleFilters}
+                        className="text-gray-600 hover:text-gray-800"
+                    >
+                      {isFiltersVisible ? <ChevronUp /> : <ChevronDown />}
+                    </Button>
+                  </div>
+                  <div className="space-y-6">
+                    {/* Categories Filter */}
+                    <div>
+                      <Label className="text-lg font-medium text-gray-700">
+                        Categories
+                      </Label>
+                      <div className="mt-2 space-y-2">
+                        {["Law", "Case Study", "Article", "Statute"].map(
+                            (category) => (
+                                <div
+                                    key={category}
+                                    className="flex items-center space-x-2"
+                                >
+                                  <Checkbox
+                                      id={category}
+                                      checked={selectedCategories.includes(category)}
+                                      onCheckedChange={() =>
+                                          handleCategoryChange(category)
+                                      }
+                                  />
+                                  <label
+                                      htmlFor={category}
+                                      className="text-sm font-medium text-gray-600"
+                                  >
+                                    {category}
+                                  </label>
+                                </div>
+                            )
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Jurisdiction Filter */}
+                    <div>
+                      <Label className="text-lg font-medium text-gray-700">
+                        Jurisdiction
+                      </Label>
+                      <Select>
+                        <SelectTrigger className="mt-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <SelectValue placeholder="Select jurisdiction" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="federal">Federal</SelectItem>
+                          <SelectItem value="state">State</SelectItem>
+                          <SelectItem value="international">
+                            International
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Practice Area Filter */}
+                    <div>
+                      <Label className="text-lg font-medium text-gray-700">
+                        Practice Area
+                      </Label>
+                      <Select>
+                        <SelectTrigger className="mt-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                          <SelectValue placeholder="Select practice area" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="corporate">Corporate Law</SelectItem>
+                          <SelectItem value="criminal">Criminal Law</SelectItem>
+                          <SelectItem value="family">Family Law</SelectItem>
+                          <SelectItem value="intellectual">
+                            Intellectual Property
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
                 </div>
-                {isFiltersVisible && (
-                    <Card className="shadow-md">
-                      <CardContent>
-                        <div className="space-y-6">
-                          {/* Categories Filter */}
-                          <div>
-                            <Label className="text-lg font-medium">Categories</Label>
-                            <ScrollArea className="h-[100px] mt-2">
-                              {["Laws", "Case Studies", "Articles", "Statutes"].map((category) => (
-                                  <div key={category} className="flex items-center space-x-2 my-2">
-                                    <Checkbox
-                                        id={category}
-                                        checked={selectedCategories.includes(category)}
-                                        onCheckedChange={() => handleCategoryChange(category)}
-                                    />
-                                    <label
-                                        htmlFor={category}
-                                        className="text-sm font-medium leading-none"
-                                    >
-                                      {category}
-                                    </label>
-                                  </div>
-                              ))}
-                            </ScrollArea>
-                          </div>
-
-                          {/* Jurisdiction Filter */}
-                          <div>
-                            <Label className="text-lg font-medium">Jurisdiction</Label>
-                            <Select>
-                              <SelectTrigger className="mt-2 w-full">
-                                <SelectValue placeholder="Select jurisdiction" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="federal">Federal</SelectItem>
-                                <SelectItem value="state">State</SelectItem>
-                                <SelectItem value="international">International</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-
-                          {/* Practice Area Filter */}
-                          <div>
-                            <Label className="text-lg font-medium">Practice Area</Label>
-                            <Select>
-                              <SelectTrigger className="mt-2 w-full">
-                                <SelectValue placeholder="Select practice area" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="corporate">Corporate Law</SelectItem>
-                                <SelectItem value="criminal">Criminal Law</SelectItem>
-                                <SelectItem value="family">Family Law</SelectItem>
-                                <SelectItem value="intellectual">Intellectual Property</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                )}
               </div>
 
               {/* Search Results Area */}
-              <div className="flex-grow">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 space-y-2 sm:space-y-0">
-                  <h2 className="text-xl font-semibold">Search Results</h2>
+              <div className="lg:w-3/4">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    Search Results
+                  </h2>
                   <div className="flex items-center space-x-2">
-                    <Label className="text-sm">Sort by:</Label>
-                    <Select onValueChange={handleSortChange} value={sortOption}>
-                      <SelectTrigger className="w-32">
+                    <Label className="text-sm text-gray-600">Sort by:</Label>
+                    <Select
+                        onValueChange={handleSortChange}
+                        value={sortOption}
+                    >
+                      <SelectTrigger className="w-36 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <SelectValue placeholder="Sort by" />
                       </SelectTrigger>
                       <SelectContent>
@@ -219,37 +247,46 @@ export default function LegalResearchTool() {
                     </Select>
                   </div>
                 </div>
-                <Card className="shadow-md">
-                  <CardContent>
-                    <ScrollArea className="h-[500px]">
-                      {results.map((result, index) => (
-                          <div
-                              key={index}
-                              className="mb-6 p-4 border rounded-md hover:shadow-lg transition-shadow duration-200"
+                <div className="space-y-6">
+                  {results.map((result, index) => (
+                      <div
+                          key={index}
+                          className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200"
+                      >
+                        <h3 className="font-semibold text-xl text-blue-600 hover:text-blue-800 transition-colors duration-200">
+                          <a
+                              href={result.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
                           >
-                            <h3 className="font-semibold text-lg">{result.title}</h3>
-                            <div className="flex items-center space-x-2 my-2">
-                              <Badge variant="outline" className="bg-blue-100 text-blue-800">
-                                {result.type}
-                              </Badge>
-                              <span className="text-sm text-gray-500">
-                            {new Date(result.date).toLocaleDateString()}
-                          </span>
-                            </div>
-                            <p className="text-sm text-gray-700 mb-2">{result.snippet}</p>
-                            <Button
-                                variant="link"
-                                className="p-0 text-blue-600 flex items-center"
-                                onClick={() => window.open(result.link, "_blank")}
-                            >
-                              View Full Document
-                              <ExternalLink className="ml-1 h-4 w-4" />
-                            </Button>
-                          </div>
-                      ))}
-                    </ScrollArea>
-                  </CardContent>
-                </Card>
+                            {result.title}
+                          </a>
+                        </h3>
+                        <div className="flex items-center space-x-3 my-2">
+                          <Badge
+                              variant="outline"
+                              className="bg-blue-100 text-blue-800 px-2 py-1"
+                          >
+                            {result.type}
+                          </Badge>
+                          <span className="text-sm text-gray-500">
+                        {new Date(result.date).toLocaleDateString()}
+                      </span>
+                        </div>
+                        <p className="text-sm text-gray-700 mb-4">
+                          {result.snippet}
+                        </p>
+                        <Button
+                            variant="link"
+                            className="text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+                            onClick={() => window.open(result.link, "_blank")}
+                        >
+                          <span>View Full Document</span>
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </div>
+                  ))}
+                </div>
               </div>
             </div>
           </CardContent>
