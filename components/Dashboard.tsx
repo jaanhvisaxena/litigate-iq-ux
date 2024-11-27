@@ -5,18 +5,22 @@ import { format } from "date-fns"
 import { UserCircleIcon } from "@heroicons/react/24/solid"
 
 // UI Components (Ensure these are correctly imported from your UI library or component directory)
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Badge } from "@/components/ui/badge"
 import { Calendar } from "@/components/ui/calendar"
-import { Select, SelectItem, SelectContent, SelectTrigger } from "@/components/ui/select"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 
 export default function Dashboard() {
   // State Variables
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+      new Date()
+  )
   const [lawyerName, setLawyerName] = useState("Aaditya") // Replace with dynamic data from session/API
-  const [selectedLawyerId, setSelectedLawyerId] = useState<string | undefined>()
   const [events, setEvents] = useState<string[]>([
     // Placeholder events; replace with data from API
     "Client Meeting at 10:00 AM",
@@ -35,32 +39,93 @@ export default function Dashboard() {
       description: "New case for corporate litigation.",
     },
   ])
-  const [activeTab, setActiveTab] = useState("All Cases")
 
-  // Function to handle lawyer selection
-  const handleLawyerSelect = (value: string) => {
-    setSelectedLawyerId(value)
-    console.log("Selected Lawyer ID:", value)
+  // Sample data for the summary cards
+  const totalCases = 120
+  const pendingCases = 45
+  const resolvedCases = 75
+  const upcomingDeadlines = 8
+
+  // State to track which card is selected
+  const [selectedCard, setSelectedCard] = useState<string | null>(null)
+
+  // Function to get the card title based on the selected card
+  const getCardTitle = (card: string) => {
+    switch (card) {
+      case "total-cases":
+        return "Total Cases"
+      case "pending-cases":
+        return "Pending Cases"
+      case "resolved-cases":
+        return "Resolved Cases"
+      case "upcoming-deadlines":
+        return "Upcoming Deadlines"
+      default:
+        return ""
+    }
   }
 
-  // Function to handle associating hearing
-  const handleAssociateHearing = () => {
-    console.log("Hearing ID, Case ID submitted with Lawyer ID:", selectedLawyerId)
-    // Implement API call here
+  // Function to get sample data based on the selected card
+  const getSampleData = (card: string) => {
+    switch (card) {
+      case "total-cases":
+        return (
+            <ul className="list-disc ml-5 space-y-2">
+              <li>Case #123: Contract Dispute</li>
+              <li>Case #124: Personal Injury</li>
+              <li>Case #125: Intellectual Property</li>
+              <li>Case #126: Employment Law</li>
+              <li>Case #127: Real Estate Transaction</li>
+            </ul>
+        )
+      case "pending-cases":
+        return (
+            <ul className="list-disc ml-5 space-y-2">
+              <li>Case #128: Ongoing Litigation</li>
+              <li>Case #129: Awaiting Court Date</li>
+              <li>Case #130: Under Investigation</li>
+              <li>Case #131: Document Review Pending</li>
+            </ul>
+        )
+      case "resolved-cases":
+        return (
+            <ul className="list-disc ml-5 space-y-2">
+              <li>Case #120: Won - Settlement Reached</li>
+              <li>Case #121: Lost - Appeal Pending</li>
+              <li>Case #122: Won - Verdict in Favor</li>
+              <li>Case #123: Won - Dismissed by Court</li>
+            </ul>
+        )
+      case "upcoming-deadlines":
+        return (
+            <ul className="list-disc ml-5 space-y-2">
+              <li>File motion for Case #132 by Oct 25</li>
+              <li>Submit evidence for Case #133 by Oct 28</li>
+              <li>Prepare witness statements by Nov 1</li>
+              <li>Client meeting for Case #134 on Nov 3</li>
+            </ul>
+        )
+      default:
+        return null
+    }
   }
 
   return (
-      <div className="space-y-8 p-6 bg-gray-50">
+      <div className="space-y-8 p-6 bg-white min-h-screen">
         {/* Welcome Section */}
         <div className="flex items-center space-x-4">
           <UserCircleIcon className="w-16 h-16 text-blue-600" />
-          <h1 className="text-3xl font-bold text-gray-800">Welcome, {lawyerName}!</h1>
+          <h1 className="text-3xl font-extrabold text-gray-800">
+            Welcome, {lawyerName}!
+          </h1>
         </div>
 
-        {/* Calendar and Hearing Association Section */}
-        <Card className="shadow-lg">
+        {/* Calendar Section */}
+        <Card className="shadow-xl border-0">
           <CardHeader>
-            <CardTitle className="text-xl text-gray-800">Appointments and Deadlines</CardTitle>
+            <CardTitle className="text-2xl text-gray-800">
+              Appointments and Deadlines
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -75,15 +140,19 @@ export default function Dashboard() {
               </div>
               {/* Events List */}
               <div className="bg-white rounded-lg p-4 shadow-md md:col-span-2">
-                <h3 className="font-semibold text-lg text-gray-700 mb-4">
-                  Events on {selectedDate ? format(selectedDate, "PPP") : "Select a date"}
+                <h3 className="font-semibold text-xl text-gray-700 mb-4">
+                  Events on{" "}
+                  {selectedDate ? format(selectedDate, "PPP") : "Select a date"}
                 </h3>
-                <ul className="list-disc ml-5 space-y-3">
-                  {/* Replace with actual events fetched from an API */}
+                <ul className="space-y-3">
                   {events.length > 0 ? (
                       events.map((event, index) => (
-                          <li key={index} className="text-gray-600">
-                            {event}
+                          <li
+                              key={index}
+                              className="text-gray-600 flex items-center space-x-2"
+                          >
+                            <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
+                            <span>{event}</span>
                           </li>
                       ))
                   ) : (
@@ -92,119 +161,161 @@ export default function Dashboard() {
                 </ul>
               </div>
             </div>
-            {/* Hearing Association */}
-            <div className="mt-6 bg-white rounded-lg p-4 shadow-md">
-              <h3 className="font-semibold text-lg text-gray-700 mb-4">Associate Hearing</h3>
-              <div className="space-y-4">
-                <Select onValueChange={handleLawyerSelect}>
-                  <SelectTrigger className="w-full border rounded-md px-3 py-2">
-                  <span>
-                    {selectedLawyerId ? `Selected Lawyer ID: ${selectedLawyerId}` : "Select Lawyer"}
-                  </span>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {/* Replace with dynamic lawyer list fetched from an API */}
-                    <SelectItem value="1">John Doe</SelectItem>
-                    <SelectItem value="2">Jane Smith</SelectItem>
-                    <SelectItem value="3">Aaditya</SelectItem>
-                  </SelectContent>
-                </Select>
-                <button
-                    onClick={handleAssociateHearing}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                >
-                  Associate Hearing
-                </button>
-              </div>
-            </div>
           </CardContent>
         </Card>
 
-        {/* Tabs Section */}
-        <div className="mt-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList>
-              <TabsTrigger value="All Cases">All Cases</TabsTrigger>
-              <TabsTrigger value="Pending Cases">Pending Cases</TabsTrigger>
-              <TabsTrigger value="Resolved Cases">Resolved Cases</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="All Cases">
-              {/* Content for All Cases */}
-              <p className="mt-4 text-gray-700">Display all cases here.</p>
-            </TabsContent>
-            <TabsContent value="Pending Cases">
-              {/* Content for Pending Cases */}
-              <p className="mt-4 text-gray-700">Display pending cases here.</p>
-            </TabsContent>
-            <TabsContent value="Resolved Cases">
-              {/* Content for Resolved Cases */}
-              <p className="mt-4 text-gray-700">Display resolved cases here.</p>
-            </TabsContent>
-          </Tabs>
-        </div>
-
         {/* Summary Cards */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="shadow-md transition-transform hover:scale-105">
+          <Card
+              onClick={() =>
+                  setSelectedCard(
+                      selectedCard === "total-cases" ? null : "total-cases"
+                  )
+              }
+              className={`shadow-md transition-transform hover:scale-105 bg-white cursor-pointer ${
+                  selectedCard === "total-cases" ? "border-blue-600 border-2" : ""
+              }`}
+          >
             <CardHeader className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-gray-700">Total Cases</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-700">
+                Total Cases
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-blue-600">100</div>
-              <p className="text-sm text-gray-500">+10 from last month</p>
+              <div className="text-4xl font-extrabold text-blue-600">
+                {totalCases}
+              </div>
+              <p className="text-sm text-gray-500 mt-2">
+                <span className="text-green-600 font-semibold">+15</span> from last
+                month
+              </p>
             </CardContent>
           </Card>
 
-          <Card className="shadow-md transition-transform hover:scale-105">
+          <Card
+              onClick={() =>
+                  setSelectedCard(
+                      selectedCard === "pending-cases" ? null : "pending-cases"
+                  )
+              }
+              className={`shadow-md transition-transform hover:scale-105 bg-white cursor-pointer ${
+                  selectedCard === "pending-cases" ? "border-yellow-600 border-2" : ""
+              }`}
+          >
             <CardHeader className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-gray-700">Pending Cases</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-700">
+                Pending Cases
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-yellow-600">30</div>
-              <p className="text-sm text-gray-500">-5 from last month</p>
+              <div className="text-4xl font-extrabold text-yellow-600">
+                {pendingCases}
+              </div>
+              <p className="text-sm text-gray-500 mt-2">
+                <span className="text-red-600 font-semibold">-3</span> from last
+                month
+              </p>
             </CardContent>
           </Card>
 
-          <Card className="shadow-md transition-transform hover:scale-105">
+          <Card
+              onClick={() =>
+                  setSelectedCard(
+                      selectedCard === "resolved-cases" ? null : "resolved-cases"
+                  )
+              }
+              className={`shadow-md transition-transform hover:scale-105 bg-white cursor-pointer ${
+                  selectedCard === "resolved-cases" ? "border-green-600 border-2" : ""
+              }`}
+          >
             <CardHeader className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-gray-700">Resolved Cases</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-700">
+                Resolved Cases
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-600">70</div>
-              <p className="text-sm text-gray-500">+15 from last month</p>
-              <p className="text-sm text-gray-400 italic">Verify cases won details.</p>
+              <div className="text-4xl font-extrabold text-green-600">
+                {resolvedCases}
+              </div>
+              <p className="text-sm text-gray-500 mt-2">
+                <span className="text-green-600 font-semibold">+18</span> from last
+                month
+              </p>
+              <p className="text-sm text-gray-400 italic mt-1">
+                Verify cases won details.
+              </p>
             </CardContent>
           </Card>
 
-          <Card className="shadow-md transition-transform hover:scale-105">
+          <Card
+              onClick={() =>
+                  setSelectedCard(
+                      selectedCard === "upcoming-deadlines"
+                          ? null
+                          : "upcoming-deadlines"
+                  )
+              }
+              className={`shadow-md transition-transform hover:scale-105 bg-white cursor-pointer ${
+                  selectedCard === "upcoming-deadlines"
+                      ? "border-red-600 border-2"
+                      : ""
+              }`}
+          >
             <CardHeader className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-gray-700">Upcoming Deadlines</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-700">
+                Upcoming Deadlines
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-red-600">12</div>
-              <p className="text-sm text-gray-500">Within next 7 days</p>
+              <div className="text-4xl font-extrabold text-red-600">
+                {upcomingDeadlines}
+              </div>
+              <p className="text-sm text-gray-500 mt-2">Within next 7 days</p>
             </CardContent>
           </Card>
         </div>
 
+        {/* Sample Data Display */}
+        {selectedCard && (
+            <div className="mt-6">
+              <Card className="shadow-md">
+                <CardHeader>
+                  <CardTitle className="text-xl text-gray-800">
+                    {getCardTitle(selectedCard)}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>{getSampleData(selectedCard)}</CardContent>
+              </Card>
+            </div>
+        )}
+
         {/* Notifications Section */}
-        <Card className="shadow-lg">
+        <Card className="shadow-xl border-0">
           <CardHeader>
-            <CardTitle className="text-xl text-gray-800">Notifications</CardTitle>
+            <CardTitle className="text-2xl text-gray-800">Notifications</CardTitle>
           </CardHeader>
           <CardContent>
             <ScrollArea className="h-[300px]">
               <div className="space-y-6">
                 {notifications.length > 0 ? (
                     notifications.map((notification, index) => (
-                        <div key={index} className="flex items-center">
-                          <Badge variant="outline" className="bg-gray-100 text-gray-800 px-3 py-1">
+                        <div
+                            key={index}
+                            className="flex items-start space-x-4 bg-white p-4 rounded-lg shadow-md"
+                        >
+                          <Badge
+                              variant="outline"
+                              className="bg-gray-100 text-gray-800 px-3 py-1"
+                          >
                             {notification.timeAgo}
                           </Badge>
-                          <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-700">{notification.title}</p>
-                            <p className="text-sm text-gray-500">{notification.description}</p>
+                          <div>
+                            <p className="text-lg font-semibold text-gray-700">
+                              {notification.title}
+                            </p>
+                            <p className="text-gray-500 mt-1">
+                              {notification.description}
+                            </p>
                           </div>
                         </div>
                     ))
