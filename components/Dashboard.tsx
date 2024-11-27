@@ -66,48 +66,100 @@ export default function Dashboard() {
   }
 
   // Function to get sample data based on the selected card
-  const getSampleData = (card: string) => {
-    switch (card) {
-      case "total-cases":
-        return (
-            <ul className="list-disc ml-5 space-y-2">
-              <li>Case #123: Contract Dispute</li>
-              <li>Case #124: Personal Injury</li>
-              <li>Case #125: Intellectual Property</li>
-              <li>Case #126: Employment Law</li>
-              <li>Case #127: Real Estate Transaction</li>
-            </ul>
-        )
-      case "pending-cases":
-        return (
-            <ul className="list-disc ml-5 space-y-2">
-              <li>Case #128: Ongoing Litigation</li>
-              <li>Case #129: Awaiting Court Date</li>
-              <li>Case #130: Under Investigation</li>
-              <li>Case #131: Document Review Pending</li>
-            </ul>
-        )
-      case "resolved-cases":
-        return (
-            <ul className="list-disc ml-5 space-y-2">
-              <li>Case #120: Won - Settlement Reached</li>
-              <li>Case #121: Lost - Appeal Pending</li>
-              <li>Case #122: Won - Verdict in Favor</li>
-              <li>Case #123: Won - Dismissed by Court</li>
-            </ul>
-        )
-      case "upcoming-deadlines":
-        return (
-            <ul className="list-disc ml-5 space-y-2">
-              <li>File motion for Case #132 by Oct 25</li>
-              <li>Submit evidence for Case #133 by Oct 28</li>
-              <li>Prepare witness statements by Nov 1</li>
-              <li>Client meeting for Case #134 on Nov 3</li>
-            </ul>
-        )
-      default:
-        return null
-    }
+    const getSampleData = (card: string) => {
+        switch (card) {
+            case "total-cases":
+                return (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm">
+                        <ul className="list-disc ml-5 space-y-2 text-gray-800">
+                            <li>
+                                <span className="font-semibold">Case #123:</span> Contract Dispute
+                            </li>
+                            <li>
+                                <span className="font-semibold">Case #124:</span> Personal Injury
+                            </li>
+                            <li>
+                                <span className="font-semibold">Case #125:</span> Intellectual Property
+                            </li>
+                            <li>
+                                <span className="font-semibold">Case #126:</span> Employment Law
+                            </li>
+                            <li>
+                                <span className="font-semibold">Case #127:</span> Real Estate Transaction
+                            </li>
+                        </ul>
+                    </div>
+                );
+
+            case "pending-cases":
+                return (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm">
+                        <ul className="list-disc ml-5 space-y-2 text-gray-800">
+                            <li>
+                                <span className="font-semibold">Case #128:</span> Ongoing Litigation
+                            </li>
+                            <li>
+                                <span className="font-semibold">Case #129:</span> Awaiting Court Date
+                            </li>
+                            <li>
+                                <span className="font-semibold">Case #130:</span> Under Investigation
+                            </li>
+                            <li>
+                                <span className="font-semibold">Case #131:</span> Document Review Pending
+                            </li>
+                        </ul>
+                    </div>
+                );
+
+            case "resolved-cases":
+                return (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm">
+                        <ul className="list-disc ml-5 space-y-2 text-gray-800">
+                            <li>
+                                <span className="font-semibold">Case #120:</span> Won - Settlement Reached
+                            </li>
+                            <li>
+                                <span className="font-semibold">Case #121:</span> Lost - Appeal Pending
+                            </li>
+                            <li>
+                                <span className="font-semibold">Case #122:</span> Won - Verdict in Favor
+                            </li>
+                            <li>
+                                <span className="font-semibold">Case #123:</span> Won - Dismissed by Court
+                            </li>
+                        </ul>
+                    </div>
+                );
+
+            case "upcoming-deadlines":
+                return (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm">
+                        <ul className="list-disc ml-5 space-y-2 text-gray-800">
+                            <li>
+                                <span className="font-semibold">File motion for Case #132:</span> by Oct 25
+                            </li>
+                            <li>
+                                <span className="font-semibold">Submit evidence for Case #133:</span> by Oct 28
+                            </li>
+                            <li>
+                                <span className="font-semibold">Prepare witness statements:</span> by Nov 1
+                            </li>
+                            <li>
+                                <span className="font-semibold">Client meeting for Case #134:</span> on Nov 3
+                            </li>
+                        </ul>
+                    </div>
+                );
+
+            default:
+                return (
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm text-center text-gray-500">
+                        No data available.
+                    </div>
+                );
+        }
+
+
   }
 
   return (

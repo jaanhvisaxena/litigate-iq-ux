@@ -87,3 +87,9 @@
     @apply bg-background text-foreground;
   }
 }
+.no-hover:focus,
+.no-hover:active,
+.no-hover:hover {
+  background-color: #e5e7eb !important; /* Tailwind's gray-200 hex value */
+}
+

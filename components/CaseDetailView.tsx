@@ -511,9 +511,7 @@ export default function CaseDetailView({ caseId }: CaseDetailViewProps) {
   const handleFavoriteToggle = () => {
     setIsFavorite(!isFavorite);
     toast(
-        isFavorite
-            ? "Case removed from favorites"
-            : "Case added to favorites",
+        isFavorite ? "Case removed from favorites" : "Case added to favorites",
         {
           icon: isFavorite ? (
               <StarOff className="text-gray-400" />
@@ -582,7 +580,7 @@ export default function CaseDetailView({ caseId }: CaseDetailViewProps) {
   }
 
   return (
-      <div className="space-y-6 p-4 sm:p-6 bg-white">
+      <div className="space-y-6 p-4 sm:p-6 bg-gray-50">
         <Toaster position="top-right" reverseOrder={false} />
         {/* Search Bar */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
@@ -616,7 +614,7 @@ export default function CaseDetailView({ caseId }: CaseDetailViewProps) {
 
         {/* Case Information */}
         <Card className="w-full shadow-lg border border-gray-200">
-          <CardHeader className="bg-gray-50">
+          <CardHeader className="bg-white">
             <CardTitle className="text-xl flex items-center space-x-2">
               <FileText className="h-6 w-6 text-blue-500" />
               <span>{caseData.title} - Case Information</span>
@@ -630,20 +628,24 @@ export default function CaseDetailView({ caseId }: CaseDetailViewProps) {
               </div>
               <div>
                 <Label className="text-gray-600">Contact Information</Label>
-                <p>Email: {caseData.contactInfo.email}</p>
-                <p>Phone: {caseData.contactInfo.phone}</p>
+                <p className="text-gray-700">
+                  Email: {caseData.contactInfo.email}
+                </p>
+                <p className="text-gray-700">
+                  Phone: {caseData.contactInfo.phone}
+                </p>
               </div>
               <div>
                 <Label className="text-gray-600">Case Type</Label>
-                <p>{caseData.caseType}</p>
+                <p className="text-gray-700">{caseData.caseType}</p>
               </div>
               <div>
                 <Label className="text-gray-600">Description</Label>
-                <p>{caseData.description}</p>
+                <p className="text-gray-700">{caseData.description}</p>
               </div>
               <div>
                 <Label className="text-gray-600">Assigned Lawyer/Team</Label>
-                <p>{caseData.assignedLawyer}</p>
+                <p className="text-gray-700">{caseData.assignedLawyer}</p>
               </div>
             </div>
             <div className="mt-6">
@@ -659,7 +661,7 @@ export default function CaseDetailView({ caseId }: CaseDetailViewProps) {
 
         {/* Notes Section */}
         <Card className="w-full shadow-lg border border-gray-200">
-          <CardHeader className="bg-gray-50">
+          <CardHeader className="bg-white">
             <CardTitle className="text-xl flex items-center space-x-2">
               <FileText className="h-6 w-6 text-orange-500" />
               <span>Notes</span>
@@ -673,7 +675,7 @@ export default function CaseDetailView({ caseId }: CaseDetailViewProps) {
                 className="w-full"
             />
             <Button
-                className="mt-4 w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white"
+                className="mt-4 w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white flex items-center"
                 onClick={handleAddNote}
             >
               Add Note
@@ -686,7 +688,7 @@ export default function CaseDetailView({ caseId }: CaseDetailViewProps) {
                     notesList.map((note, index) => (
                         <div key={index} className="mb-4">
                           <p className="text-sm text-gray-500">{note.date}</p>
-                          <p className="text-base">{note.content}</p>
+                          <p className="text-base text-gray-700">{note.content}</p>
                         </div>
                     ))
                 ) : (
@@ -699,7 +701,7 @@ export default function CaseDetailView({ caseId }: CaseDetailViewProps) {
 
         {/* Documents Section */}
         <Card className="w-full shadow-lg border border-gray-200">
-          <CardHeader className="bg-gray-50">
+          <CardHeader className="bg-white">
             <CardTitle className="text-xl flex items-center space-x-2">
               <FileText className="h-6 w-6 text-purple-500" />
               <span>Documents</span>
@@ -732,59 +734,34 @@ export default function CaseDetailView({ caseId }: CaseDetailViewProps) {
                         {selectedCategory}
                       </Select.Value>
                       <Select.Icon>
-                        <ChevronDown className="h-4 w-4" />
+                        <ChevronDown className="h-4 w-4 text-gray-500" />
                       </Select.Icon>
                     </Select.Trigger>
                     <Select.Content className="w-full bg-white rounded-md shadow-md">
                       <Select.ScrollUpButton className="flex items-center justify-center h-6 bg-white cursor-default">
-                        <ChevronUp className="h-4 w-4" />
+                        <ChevronUp className="h-4 w-4 text-gray-500" />
                       </Select.ScrollUpButton>
                       <Select.Viewport className="p-1">
-                        <Select.Item
-                            value="Pleadings"
-                            className={cn(
-                                "relative flex items-center px-8 py-2 rounded-md text-sm cursor-pointer select-none",
-                                selectedCategory === "Pleadings"
-                                    ? "bg-blue-600 text-white"
-                                    : "text-gray-900"
-                            )}
-                        >
-                          <Select.ItemText>Pleadings</Select.ItemText>
-                          <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
-                            <Check className="h-4 w-4" />
-                          </Select.ItemIndicator>
-                        </Select.Item>
-                        <Select.Item
-                            value="Contracts"
-                            className={cn(
-                                "relative flex items-center px-8 py-2 rounded-md text-sm cursor-pointer select-none",
-                                selectedCategory === "Contracts"
-                                    ? "bg-blue-600 text-white"
-                                    : "text-gray-900"
-                            )}
-                        >
-                          <Select.ItemText>Contracts</Select.ItemText>
-                          <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
-                            <Check className="h-4 w-4" />
-                          </Select.ItemIndicator>
-                        </Select.Item>
-                        <Select.Item
-                            value="Evidence"
-                            className={cn(
-                                "relative flex items-center px-8 py-2 rounded-md text-sm cursor-pointer select-none",
-                                selectedCategory === "Evidence"
-                                    ? "bg-blue-600 text-white"
-                                    : "text-gray-900"
-                            )}
-                        >
-                          <Select.ItemText>Evidence</Select.ItemText>
-                          <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
-                            <Check className="h-4 w-4" />
-                          </Select.ItemIndicator>
-                        </Select.Item>
+                        {["Pleadings", "Contracts", "Evidence"].map((category) => (
+                            <Select.Item
+                                key={category}
+                                value={category}
+                                className={cn(
+                                    "relative flex items-center px-8 py-2 rounded-md text-sm cursor-pointer select-none",
+                                    selectedCategory === category
+                                        ? "bg-blue-600 text-white"
+                                        : "text-gray-900 hover:bg-gray-100"
+                                )}
+                            >
+                              <Select.ItemText>{category}</Select.ItemText>
+                              <Select.ItemIndicator className="absolute left-2 inline-flex items-center">
+                                <Check className="h-4 w-4" />
+                              </Select.ItemIndicator>
+                            </Select.Item>
+                        ))}
                       </Select.Viewport>
                       <Select.ScrollDownButton className="flex items-center justify-center h-6 bg-white cursor-default">
-                        <ChevronDown className="h-4 w-4" />
+                        <ChevronDown className="h-4 w-4 text-gray-500" />
                       </Select.ScrollDownButton>
                     </Select.Content>
                   </Select.Root>
@@ -792,7 +769,7 @@ export default function CaseDetailView({ caseId }: CaseDetailViewProps) {
                 <Button
                     onClick={handleUpload}
                     disabled={uploading}
-                    className="mt-4 sm:mt-0 sm:w-auto bg-blue-600 hover:bg-blue-700 text-white"
+                    className="mt-4 sm:mt-0 sm:w-auto bg-purple-600 hover:bg-purple-700 text-white flex items-center"
                 >
                   {uploading ? (
                       "Uploading..."

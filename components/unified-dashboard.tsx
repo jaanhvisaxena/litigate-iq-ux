@@ -31,7 +31,7 @@ export default function UnifiedDashboardComponent() {
   const renderContent = () => {
     switch (activeSection) {
       case "dashboard":
-        return <Dashboard/>;
+        return <Dashboard />;
       case "case-management":
         return (
             <CaseManagement
@@ -43,31 +43,32 @@ export default function UnifiedDashboardComponent() {
         );
       case "case-detail":
         if (selectedCaseId) {
-          return <CaseDetailView caseId={selectedCaseId}/>;
+          return <CaseDetailView caseId={selectedCaseId} />;
         }
         return <p>No case selected. Go back to Case Management.</p>;
       case "legal-research":
-        return <LegalResearchTool/>;
+        return <LegalResearchTool />;
       case "communication":
-        return <CommunicationModule/>;
+        return <CommunicationModule />;
       case "settings":
-        return <SettingsComponent/>;
+        return <SettingsComponent />;
       default:
         return <div>Welcome to the Dashboard</div>;
     }
   };
 
   return (
-      <div className="flex h-screen bg-gray-100 overflow-hidden">
+      <div className="flex h-screen overflow-hidden">
         {/* Sidebar */}
-        <aside
+        <div
             className={`${
                 isSidebarOpen ? "w-64" : "w-20"
-            } flex flex-col bg-white border-r transition-all duration-300`}
+            } hidden sm:flex flex-col bg-white border-r transition-all duration-300`}
         >
-          {/* Sidebar Header */}
           <div className="flex items-center justify-between p-4 border-b">
-            {isSidebarOpen && <h1 className="text-2xl font-bold text-gray-800">LitigateIQ</h1>}
+            {isSidebarOpen && (
+                <h1 className="text-2xl font-bold text-gray-800">LitigateIQ</h1>
+            )}
             <Button
                 variant="ghost"
                 size="sm"
@@ -76,37 +77,83 @@ export default function UnifiedDashboardComponent() {
                 aria-label="Toggle Sidebar"
             >
               {isSidebarOpen ? (
-                  <ChevronsLeft className="h-5 w-5"/>
+                  <ChevronsLeft className="h-5 w-5" />
               ) : (
-                  <ChevronsRight className="h-5 w-5"/>
+                  <ChevronsRight className="h-5 w-5" />
               )}
             </Button>
           </div>
 
           {/* Sidebar Navigation */}
-          <nav className="flex-1 overflow-y-auto">
-            <ul className="space-y-2 p-2">
-              {[
-                {label: "Dashboard", icon: Grid, section: "dashboard"},
-                {label: "Case Management", icon: FolderOpen, section: "case-management"},
-                {label: "Legal Research", icon: Search, section: "legal-research"},
-                {label: "Communication", icon: MessageSquare, section: "communication"},
-                {label: "Settings", icon: Settings, section: "settings"},
-              ].map(({label, icon: Icon, section}) => (
-                  <li key={section}>
-                    <Button
-                        onClick={() => setActiveSection(section)}
-                        className={`w-full flex items-center px-4 py-3 rounded-lg transition ${
-                            activeSection === section
-                                ? "bg-gray-200 text-black"
-                                : "bg-white text-black hover:bg-gray-100"
-                        }`}
-                    >
-                      <Icon className="h-5 w-5 mr-3"/>
-                      {isSidebarOpen && label}
-                    </Button>
-                  </li>
-              ))}
+          {/* Sidebar Navigation */}
+          <nav className="mt-2 flex-1 overflow-y-auto">
+            <ul className="space-y-2">
+              <li>
+                <Button
+                    onClick={() => setActiveSection("dashboard")}
+                    className={`w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg no-hover ${
+                        activeSection === "dashboard"
+                            ? "bg-gray-200 text-black"
+                            : "bg-white text-black hover:bg-transparent focus:bg-transparent active:bg-transparent"
+                    }`}
+                >
+                  <Grid className="h-5 w-5 mr-2" />
+                  {isSidebarOpen && "Dashboard"}
+                </Button>
+
+              </li>
+              <li>
+                <Button
+                    onClick={() => setActiveSection("case-management")}
+                    className={`w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg no-hover ${
+                        activeSection === "case-management"
+                            ? "bg-gray-200 text-black"
+                            : "bg-white text-black hover:bg-gray-100"
+                    }`}
+                >
+                  <FolderOpen className="h-5 w-5 mr-2" />
+                  {isSidebarOpen && "Case Management"}
+                </Button>
+              </li>
+              <li>
+                <Button
+                    onClick={() => setActiveSection("legal-research")}
+                    className={`w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg no-hover ${
+                        activeSection === "legal-research"
+                            ? "bg-gray-200 text-black"
+                            : "bg-white text-black hover:bg-gray-100"
+                    }`}
+                >
+                  <Search className="h-5 w-5 mr-2" />
+                  {isSidebarOpen && "Legal Research"}
+                </Button>
+              </li>
+              <li>
+                <Button
+                    onClick={() => setActiveSection("communication")}
+                    className={`w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg no-hover ${
+                        activeSection === "communication"
+                            ? "bg-gray-200 text-black"
+                            : "bg-white text-black hover:bg-gray-100"
+                    }`}
+                >
+                  <MessageSquare className="h-5 w-5 mr-2" />
+                  {isSidebarOpen && "Communication"}
+                </Button>
+              </li>
+              <li>
+                <Button
+                    onClick={() => setActiveSection("settings")}
+                    className={`w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg no-hover  ${
+                        activeSection === "settings"
+                            ? "bg-gray-200 text-black"
+                            : "bg-white text-black hover:bg-gray-100"
+                    }`}
+                >
+                  <Settings className="h-5 w-5 mr-2" />
+                  {isSidebarOpen && "Settings"}
+                </Button>
+              </li>
             </ul>
           </nav>
 
@@ -117,16 +164,16 @@ export default function UnifiedDashboardComponent() {
                 className="text-black border-black w-full"
                 onClick={() => alert("Logout clicked!")}
             >
-              <LogOut className="mr-3 h-5 w-5"/>
+              <LogOut className="mr-3 h-5 w-5" />
               {isSidebarOpen && "Logout"}
             </Button>
           </div>
-        </aside>
+        </div>
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Header */}
-          <header className="flex items-center justify-between px-4 py-3 bg-white shadow sm:px-8">
+          <div className="flex justify-start items-start px-4 py-3 bg-white shadow sm:px-8">
             {/* Mobile Menu Button */}
             <Button
                 variant="ghost"
@@ -134,10 +181,10 @@ export default function UnifiedDashboardComponent() {
                 onClick={() => setIsMobileMenuOpen(true)}
                 aria-label="Open Menu"
             >
-              <Menu className="h-6 w-6"/>
+              <Menu className="h-6 w-6" />
             </Button>
 
-            {/* Page Title */}
+            {/* Centered Page Title */}
             <h2 className="flex-1 text-center text-xl font-bold text-gray-800 sm:text-left">
               {activeSection
                   .split("-")
@@ -151,13 +198,13 @@ export default function UnifiedDashboardComponent() {
                 className="hidden sm:flex items-center"
                 onClick={() => alert("Logout clicked!")}
             >
-              <LogOut className="h-5 w-5 mr-2"/>
+              <LogOut className="h-5 w-5 mr-2" />
               Logout
             </Button>
-          </header>
+          </div>
 
           {/* Main Content Area */}
-          <main className="flex-1 overflow-y-auto p-4 sm:p-8">
+          <main className="flex-1 overflow-y-auto p-4 sm:p-8 bg-gray-100">
             {renderContent()}
           </main>
         </div>
