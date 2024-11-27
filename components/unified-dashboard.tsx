@@ -1,3 +1,5 @@
+// components/UnifiedDashboardComponent.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -11,7 +13,6 @@ import {
   ChevronsLeft,
   ChevronsRight,
   Menu,
-  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -25,7 +26,6 @@ import CaseDetailView from "@/components/CaseDetailView";
 export default function UnifiedDashboardComponent() {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedCaseId, setSelectedCaseId] = useState<number | null>(null);
 
   const renderContent = () => {
@@ -42,7 +42,7 @@ export default function UnifiedDashboardComponent() {
             />
         );
       case "case-detail":
-        if (selectedCaseId) {
+        if (selectedCaseId !== null) {
           return <CaseDetailView caseId={selectedCaseId} />;
         }
         return <p>No case selected. Go back to Case Management.</p>;
@@ -56,6 +56,9 @@ export default function UnifiedDashboardComponent() {
         return <div>Welcome to the Dashboard</div>;
     }
   };
+
+  const baseButtonStyle =
+      "w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg";
 
   return (
       <div className="flex h-screen overflow-hidden">
@@ -85,27 +88,25 @@ export default function UnifiedDashboardComponent() {
           </div>
 
           {/* Sidebar Navigation */}
-          {/* Sidebar Navigation */}
           <nav className="mt-2 flex-1 overflow-y-auto">
             <ul className="space-y-2">
               <li>
                 <Button
                     onClick={() => setActiveSection("dashboard")}
-                    className={`w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg no-hover ${
+                    className={`${baseButtonStyle} ${
                         activeSection === "dashboard"
                             ? "bg-gray-200 text-black"
-                            : "bg-white text-black hover:bg-transparent focus:bg-transparent active:bg-transparent"
+                            : "bg-white text-black hover:bg-gray-100"
                     }`}
                 >
                   <Grid className="h-5 w-5 mr-2" />
                   {isSidebarOpen && "Dashboard"}
                 </Button>
-
               </li>
               <li>
                 <Button
                     onClick={() => setActiveSection("case-management")}
-                    className={`w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg no-hover ${
+                    className={`${baseButtonStyle} ${
                         activeSection === "case-management"
                             ? "bg-gray-200 text-black"
                             : "bg-white text-black hover:bg-gray-100"
@@ -118,7 +119,7 @@ export default function UnifiedDashboardComponent() {
               <li>
                 <Button
                     onClick={() => setActiveSection("legal-research")}
-                    className={`w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg no-hover ${
+                    className={`${baseButtonStyle} ${
                         activeSection === "legal-research"
                             ? "bg-gray-200 text-black"
                             : "bg-white text-black hover:bg-gray-100"
@@ -131,7 +132,7 @@ export default function UnifiedDashboardComponent() {
               <li>
                 <Button
                     onClick={() => setActiveSection("communication")}
-                    className={`w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg no-hover ${
+                    className={`${baseButtonStyle} ${
                         activeSection === "communication"
                             ? "bg-gray-200 text-black"
                             : "bg-white text-black hover:bg-gray-100"
@@ -144,7 +145,7 @@ export default function UnifiedDashboardComponent() {
               <li>
                 <Button
                     onClick={() => setActiveSection("settings")}
-                    className={`w-full flex items-center justify-start pl-4 pr-2 py-3 text-left rounded-lg no-hover  ${
+                    className={`${baseButtonStyle} ${
                         activeSection === "settings"
                             ? "bg-gray-200 text-black"
                             : "bg-white text-black hover:bg-gray-100"
@@ -178,10 +179,14 @@ export default function UnifiedDashboardComponent() {
             <Button
                 variant="ghost"
                 className="sm:hidden"
-                onClick={() => setIsMobileMenuOpen(true)}
-                aria-label="Open Menu"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                aria-label="Toggle Menu"
             >
-              <Menu className="h-6 w-6" />
+              {isSidebarOpen ? (
+                  <ChevronsLeft className="h-6 w-6" />
+              ) : (
+                  <Menu className="h-6 w-6" />
+              )}
             </Button>
 
             {/* Centered Page Title */}

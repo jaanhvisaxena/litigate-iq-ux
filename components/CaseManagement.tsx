@@ -1,3 +1,5 @@
+// components/CaseManagement.tsx
+
 "use client";
 
 import { useState } from "react";
@@ -16,7 +18,11 @@ import { PlusCircle, Star, StarOff, Search } from "lucide-react";
 import { Toaster, toast } from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 
-export default function CaseManagement() {
+interface CaseManagementProps {
+    onCaseSelect: (id: number) => void;
+}
+
+export default function CaseManagement({ onCaseSelect }: CaseManagementProps) {
     const router = useRouter();
 
     // State for cases
@@ -57,23 +63,14 @@ export default function CaseManagement() {
         const case_ = cases.find((case_) => case_.id === caseId);
         if (case_) {
             toast.success(
-                case_.isPinned
-                    ? "Case unpinned successfully!"
-                    : "Case pinned successfully!"
+                case_.isPinned ? "Case unpinned successfully!" : "Case pinned successfully!"
             );
         }
     };
 
-    // Handler to navigate to case detail page
-    const handleViewDetails = (caseId: number) => {
-        router.push(`/cases/${caseId}`);
-    };
-
     // Filtered and sorted cases
     const filteredCases = cases
-        .filter((case_) =>
-            case_.title.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+        .filter((case_) => case_.title.toLowerCase().includes(searchQuery.toLowerCase()))
         .sort((a, b) => (a.isPinned === b.isPinned ? 0 : a.isPinned ? -1 : 1));
 
     return (
@@ -100,7 +97,6 @@ export default function CaseManagement() {
                             />
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                         </div>
-
                         <Button
                             variant="outline"
                             className="px-6 py-3 bg-white border border-gray-300 hover:bg-gray-100 text-gray-600 rounded-md"
@@ -117,14 +113,15 @@ export default function CaseManagement() {
                                     key={case_.id}
                                     className="flex items-center justify-between p-4 mb-4 bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200"
                                 >
-                                    <div onClick={() => handleViewDetails(case_.id)}>
-                                        <h3 className="font-semibold text-lg text-blue-600 hover:text-blue-800 transition-colors duration-200 cursor-pointer">
+                                    <div
+                                        onClick={() => onCaseSelect(case_.id)}
+                                        className="cursor-pointer"
+                                    >
+                                        <h3 className="font-semibold text-lg text-blue-600 hover:text-blue-800 transition-colors duration-200">
                                             {case_.title}
                                         </h3>
                                         <p className="text-sm text-gray-600">Status: {case_.status}</p>
-                                        <p className="text-sm text-gray-600">
-                                            Deadline: {case_.deadline}
-                                        </p>
+                                        <p className="text-sm text-gray-600">Deadline: {case_.deadline}</p>
                                     </div>
                                     <div>
                                         <Button
@@ -157,6 +154,5 @@ export default function CaseManagement() {
                 </CardFooter>
             </Card>
         </div>
-
     );
 }
