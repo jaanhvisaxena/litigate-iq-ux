@@ -24,11 +24,21 @@ import { Badge } from "@/components/ui/badge"
 import { ChevronDown, ChevronUp, ExternalLink } from "lucide-react"
 
 export default function LegalResearchTool() {
+  // Keep the main search state
   const [searchQuery, setSearchQuery] = useState("")
+
+  // Toggle filters
   const [isFiltersVisible, setIsFiltersVisible] = useState(true)
+
+  // Sorting state
   const [sortOption, setSortOption] = useState("relevance")
+
+  // Categories
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [results, setResults] = useState([
+
+  // Below is the master array with all data (including cases & articles).
+  // We won't remove them; we'll simply filter out what's not needed at search time.
+  const [allResults] = useState([
     {
       title: "Smith v. Jones (2022)",
       type: "Case Study",
@@ -64,25 +74,65 @@ export default function LegalResearchTool() {
       link: "https://example.com/data-privacy",
       date: "2022-01-30",
     },
+    {
+      title: "Data Privacy and Security Breach Notification Act of 2021",
+      type: "Law",
+      snippet: "Legislation covering obligations of organizations in the event of a data breach...",
+      link: "https://example.com/data-privacy-security-breach",
+      date: "2021-09-01",
+    },
+
   ])
 
+  // This is what you actually display in the Search Results section
+  const [results, setResults] = useState([...allResults])
+
+  // A simple state to show recommended items
+  const [recommendedResults, setRecommendedResults] = useState<typeof allResults>(
+      []
+  )
+
+  // Search form submission
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // Implement search functionality
-    console.log("Searching...")
-    // Placeholder for backend integration
+
+    // Lowercase query for simple substring matching
+    const query = searchQuery.toLowerCase()
+
+    // 1) Filter out only Laws/Statutes
+    // 2) Check if they contain the user search text in title OR snippet
+    const lawResults = allResults.filter(
+        (item) =>
+            (item.type.toLowerCase() === "law" || item.type.toLowerCase() === "statute") &&
+            (item.title.toLowerCase().includes(query) ||
+                item.snippet.toLowerCase().includes(query))
+    )
+
+    // For the prototype, let's do a trivial recommendation:
+    // "Show me up to 2 other Laws that were not in the direct search result."
+    const recommended = allResults.filter(
+        (item) =>
+            item.type.toLowerCase() === "law" &&
+            !lawResults.includes(item) // not already in the main result
+    ).slice(0, 2)
+
+    setResults(lawResults)
+    setRecommendedResults(recommended)
   }
 
+  // Toggle filter sidebar
   const toggleFilters = () => {
     setIsFiltersVisible(!isFiltersVisible)
   }
 
+  // Sort change
   const handleSortChange = (value: string) => {
     setSortOption(value)
-    // Implement sorting logic
+    // This demo sorts the currently displayed "results", not "allResults."
+    // But you can adjust logic to re-query or re-sort as needed.
     const sortedResults = [...results].sort((a, b) => {
       if (value === "relevance") {
-        // Placeholder: Sort by relevance (assuming current order is by relevance)
+        // Placeholder: Sort by relevance (assuming the initial order is 'relevant')
         return 0
       } else if (value === "recency") {
         return new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -92,13 +142,14 @@ export default function LegalResearchTool() {
     setResults(sortedResults)
   }
 
+  // Filter by category
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prev) =>
         prev.includes(category)
             ? prev.filter((c) => c !== category)
             : [...prev, category]
     )
-    // Implement filtering logic based on selected categories
+    // You can expand on your category-based filtering logic here
   }
 
   return (
@@ -233,10 +284,7 @@ export default function LegalResearchTool() {
                   </h2>
                   <div className="flex items-center space-x-2">
                     <Label className="text-sm text-gray-600">Sort by:</Label>
-                    <Select
-                        onValueChange={handleSortChange}
-                        value={sortOption}
-                    >
+                    <Select onValueChange={handleSortChange} value={sortOption}>
                       <SelectTrigger className="w-36 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <SelectValue placeholder="Sort by" />
                       </SelectTrigger>
@@ -247,6 +295,8 @@ export default function LegalResearchTool() {
                     </Select>
                   </div>
                 </div>
+
+                {/* The main results (filtered by the user's search) */}
                 <div className="space-y-6">
                   {results.map((result, index) => (
                       <div
@@ -287,6 +337,53 @@ export default function LegalResearchTool() {
                       </div>
                   ))}
                 </div>
+
+                {/* Recommended Acts (only shown if we found any after a search) */}
+                {recommendedResults.length > 0 && (
+                    <div className="space-y-6 mt-8">
+                      <h2 className="text-xl font-semibold text-gray-800">
+                        Recommended Similar Acts
+                      </h2>
+                      {recommendedResults.map((item, idx) => (
+                          <div
+                              key={`recommended-${idx}`}
+                              className="p-6 bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-200"
+                          >
+                            <h3 className="font-semibold text-xl text-blue-600 hover:text-blue-800 transition-colors duration-200">
+                              <a
+                                  href={item.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                              >
+                                {item.title}
+                              </a>
+                            </h3>
+                            <div className="flex items-center space-x-3 my-2">
+                              <Badge
+                                  variant="outline"
+                                  className="bg-green-100 text-green-800 px-2 py-1"
+                              >
+                                {item.type}
+                              </Badge>
+                              <span className="text-sm text-gray-500">
+                          {new Date(item.date).toLocaleDateString()}
+                        </span>
+                            </div>
+                            <p className="text-sm text-gray-700 mb-4">
+                              {item.snippet}
+                            </p>
+                            <Button
+                                variant="link"
+                                className="text-blue-600 hover:text-blue-800 flex items-center space-x-1"
+                                onClick={() => window.open(item.link, "_blank")}
+                            >
+                              <span>View Full Document</span>
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                          </div>
+                      ))}
+                    </div>
+                )}
               </div>
             </div>
           </CardContent>
